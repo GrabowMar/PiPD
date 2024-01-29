@@ -9,4 +9,3 @@ Werkzeug
 flask-cors
 pandas
 requests
-json
