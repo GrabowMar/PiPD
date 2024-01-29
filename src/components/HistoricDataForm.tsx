@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Table, Tag, Typography, Radio } from 'antd';
+import axios from 'axios';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { baseURL } from '../utils/constants';
 
 interface HistoricData {
     // Updated to match the provided JSON schema
@@ -52,7 +56,7 @@ function HistoricDataForm() {
     
         try {
             const queryString = constructQueryString();
-            const apiUrl = `http://159.69.183.243:5001/api/gios-historic-data?${queryString}`;
+            const apiUrl = `${baseURL}/gios-historic-data?${queryString}`;
             console.log(apiUrl)
             const response = await fetch(apiUrl);
     
