@@ -50,13 +50,12 @@ def get_gios_historic_data():
         lista_statystyk = data.get("Lista statystyk", [])
         # Return the modified list as JSON
         df = pd.DataFrame(lista_statystyk)
-        df = df.to_json(orient='records')
-        yearly_trends = df.groupby('Rok').mean()
-        zone_variation = df.groupby('Województwo').mean()
-        #add to df
-        lista_statystyk.append(yearly_trends)
-        lista_statystyk.append(zone_variation)
-        return jsonify(lista_statystyk)
+        # df = df.to_json(orient='records')
+        # yearly_trends = df.groupby('Rok').mean()
+        # zone_variation = df.groupby('Województwo').mean()
+        # lista_statystyk.append(yearly_trends)
+        # lista_statystyk.append(zone_variation)
+        return jsonify(df)
 
     except requests.RequestException as e:
         # Return error message if the request fails
