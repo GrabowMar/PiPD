@@ -102,7 +102,7 @@ def get_gios_historic_data_internal(indicator='', page='0', size='20', sort='', 
     return json_array_to_dataframe(lista_statystyk)
 
 
-@app.route('/api/gios-historic-data')
+@app.route('/api/gios-historic-data', methods=['GET'])
 def get_gios_historic_data():
     try:
         # Retrieve query parameters
