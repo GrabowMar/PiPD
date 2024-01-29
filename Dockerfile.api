@@ -3,18 +3,13 @@
 FROM python:3.9
 WORKDIR /app
 
-# Copy the requirements and application files
 COPY api/requirements.txt api/api.py api/.flaskenv ./
-
-# Install the requirements
 RUN pip install -r ./requirements.txt
-
-# Set the Flask environment to production
 ENV FLASK_ENV production
 
 # Copy SSL certificate and key
-COPY cert/ssl.cert /etc/ssl/certs/ssl.cert
-COPY cert/ssl.key /etc/ssl/private/ssl.key
+COPY ./cert/ssl.cert /etc/ssl/certs/ssl.cert
+COPY ./cert/ssl.key /etc/ssl/private/ssl.key
 
 # Expose the port 5000 for HTTP and 443 for HTTPS
 EXPOSE 5000 443
