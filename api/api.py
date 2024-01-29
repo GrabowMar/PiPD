@@ -31,36 +31,6 @@ population_data = {
     'ZACHODNIOPOMORSKIE': 1701000
 }
 
-@app.route('/api/gios-historic-data')
-def get_gios_historic_data():
-    try:
-        # Retrieve query parameters
-        indicator = request.args.get('indicator', default='')
-        page = request.args.get('page', default='0')
-        size = request.args.get('size', default='20')
-        sort = request.args.get('sort', default='')
-        wojewodztwo = request.args.get('wojewodztwo', default='')
-
-        # Construct the GIOŚ API URL with query parameters
-        api_url = f"https://api.gios.gov.pl/pjp-api/v1/rest/statistics/getStatisticsForPollutants?indicator={indicator}&page={page}&size={size}&sort={sort}&filter[wojewodztwo]={wojewodztwo}"
-
-        # Make the request to the GIOŚ API
-        response = requests.get(api_url)
-        response.raise_for_status()  # This will raise an exception for HTTP errors
-        data = response.json()
-        lista_statystyk = data.get("Lista statystyk", [])
-        # Return the modified list as JSON
-        df = pd.DataFrame(lista_statystyk)
-        # df = df.to_json(orient='records')
-        # yearly_trends = df.groupby('Rok').mean()
-        # zone_variation = df.groupby('Województwo').mean()
-        # lista_statystyk.append(yearly_trends)
-        # lista_statystyk.append(zone_variation)
-        return jsonify(df)
-
-    except requests.RequestException as e:
-        # Return error message if the request fails
-        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/gios-data')
@@ -130,6 +100,24 @@ def get_gios_historic_data_internal(indicator='', page='0', size='20', sort='', 
     lista_statystyk = data.get("Lista statystyk", [])
     # Return the modified list as JSON
     return json_array_to_dataframe(lista_statystyk)
+
+
+@app.route('/api/gios-historic-data')
+def get_gios_historic_data():
+    try:
+        # Retrieve query parameters
+        indicator = request.args.get('indicator', default='')
+        page = request.args.get('page', default='0')
+        size = request.args.get('size', default='20')
+        sort = request.args.get('sort', default='')
+        wojewodztwo = request.args.get('wojewodztwo', default='wielkopolskie')
+
+        df = get_gios_historic_data_internal(indicator, page, size, '', wojewodztwo)
+    except requests.RequestException as e:
+        # Return error message if the request fails
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/api/gios-historic-data-avg', methods=['GET'])
 def get_historic_data_avg():
