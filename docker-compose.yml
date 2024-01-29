@@ -1,13 +1,25 @@
+
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile.api
     image: react-flask-app-api
+    volumes:
+      - ./cert:/cert
+    ports:
+      - "5000:5000"
+      - "5443:443"
+    environment:
+      - FLASK_ENV=production
+
   client:
     build:
       context: .
       dockerfile: Dockerfile.client
     image: react-flask-app-client
+    volumes:
+      - ./cert:/cert
     ports:
       - "3000:80"
+      - "3443:443"
