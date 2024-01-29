@@ -53,33 +53,21 @@ function HistoricDataForm() {
         event.preventDefault();
         setLoading(true);
         setError('');
-        
+    
         try {
             const queryString = constructQueryString();
             const apiUrl = `${baseURL}/gios-historic-data?${queryString}`;
             console.log(apiUrl)
             const response = await fetch(apiUrl);
-        
+    
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-        
-            const unparsedResponseData = await response.json();
-            const responseData = JSON.parse(unparsedResponseData);
     
-            // Clean the data: replace NaN values with null or a suitable default
-            const cleanedData = responseData.map((item: HistoricData) => {
-                const cleanedItem = { ...item };
-                Object.keys(cleanedItem).forEach(key => {
-                    if (cleanedItem[key] !== cleanedItem[key]) { // NaN check
-                        cleanedItem[key] = null; // or use a suitable default value
-                    }
-                });
-                return cleanedItem;
-            });
-    
-            if (cleanedData && Array.isArray(cleanedData)) {
-                setData(cleanedData);
+            const responseData = await response.json();
+            // Check if the responseData has the 'Lista statystyk' key and it is an array
+            if (responseData && Array.isArray(responseData)) {
+                setData(responseData);
             } else {
                 throw new Error('Data format error: Expected an array in "Lista statystyk"');
             }
