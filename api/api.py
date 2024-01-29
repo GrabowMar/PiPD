@@ -113,6 +113,7 @@ def get_gios_historic_data():
         wojewodztwo = request.args.get('wojewodztwo', default='wielkopolskie')
 
         df = get_gios_historic_data_internal(indicator, page, size, '', wojewodztwo)
+        return jsonify(df)
     except requests.RequestException as e:
         # Return error message if the request fails
         return jsonify({'error': str(e)}), 500
